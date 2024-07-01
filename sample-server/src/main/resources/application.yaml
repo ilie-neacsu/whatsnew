@@ -1,0 +1,9 @@
+spring:
+  application.name: sampleserver
+  h2.console.enabled: true
+
+spring.datasource:
+  name: blog
+  generate-unique-name: false
+
+server.port: 8081
