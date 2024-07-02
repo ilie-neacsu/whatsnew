@@ -2,6 +2,7 @@ package ai.webtch.sampleserver.jdbcclient;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Qualifier("jdbcTemplateService")
 public class JdbcTemplatePostService implements PostService {
 
     private static final Logger log = LoggerFactory.getLogger(JdbcTemplatePostService.class);

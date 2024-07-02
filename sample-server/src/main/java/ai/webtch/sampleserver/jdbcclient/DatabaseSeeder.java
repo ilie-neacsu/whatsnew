@@ -13,7 +13,7 @@ public class DatabaseSeeder {
 
     private final PostService postService;
 
-    public DatabaseSeeder(@Qualifier("jdbcTemplateServices") PostService postService) {
+    public DatabaseSeeder(@Qualifier("jdbcTemplateService") PostService postService) {
         this.postService = postService;
     }
 
