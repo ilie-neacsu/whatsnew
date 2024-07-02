@@ -29,16 +29,17 @@ public class JdbcTemplatePostService implements PostService {
             rs.getString("slug"),
             rs.getDate("date").toLocalDate(),
             rs.getInt("time_to_read"),
-            rs.getString("tags")
+            rs.getString("tags"),
+            rs.getInt("version")
     );
 
     public List<Post> findAll() {
-        var sql = "SELECT id,title,slug,date,time_to_read,tags FROM post";
+        var sql = "SELECT id, title, slug, date, time_to_read, tags, version FROM post";
         return jdbcTemplate.query(sql, rowMapper);
     }
 
     public Optional<Post> findById(String id) {
-        var sql = "SELECT id,title,slug,date,time_to_read,tags FROM post WHERE id = ?";
+        var sql = "SELECT id, title, slug, date, time_to_read, tags, version FROM post WHERE id = ?";
         Post post = null;
         try {
             post = jdbcTemplate.queryForObject(sql,rowMapper,id);
@@ -50,15 +51,23 @@ public class JdbcTemplatePostService implements PostService {
     }
 
     public void create(Post post) {
-        String sql = "INSERT INTO post(id,title,slug,date,time_to_read,tags) values(?,?,?,?,?,?)";
-        int insert = jdbcTemplate.update(sql,post.id(),post.title(),post.slug(),post.date(),post.timeToRead(),post.tags());
+        String sql = "INSERT INTO post(id, title, slug, date, time_to_read, tags, version) values(?, ?, ?, ?, ?, ?, ?)";
+        int insert = jdbcTemplate.update(sql,
+                post.id(),
+                post.title(),
+                post.slug(),
+                post.date(),
+                post.timeToRead(),
+                post.tags(),
+                post.version());
+
         if(insert == 1) {
-            log.info("New Post Created: " + post.title());
+            log.info("New Post Created: {}", post.title());
         }
     }
 
     public void batchCreate(Collection<Post> posts, int batchSize) {
-        String sql = "INSERT INTO post(id,title,slug,date,time_to_read,tags) values(?,?,?,?,?,?)";
+        String sql = "INSERT INTO post(id, title, slug, date, time_to_read, tags, version) values(?,?,?,?,?,?,?)";
         int[][] rowsCreated = jdbcTemplate.batchUpdate(sql,
                 posts,
                 batchSize,
@@ -69,14 +78,17 @@ public class JdbcTemplatePostService implements PostService {
                     ps.setDate(4, java.sql.Date.valueOf(argument.date()));
                     ps.setInt(5, argument.timeToRead());
                     ps.setString(6, argument.tags());
+                    ps.setInt(7, argument.version());
                 });
 
         log.info("Batch Update Created: " + rowsCreated[0].length + " rows");
     }
 
     public void update(Post post, String id) {
-        String sql = "update post set title = ?, slug = ?, date = ?, time_to_read = ?, tags = ? where id = ?";
-        int update = jdbcTemplate.update(sql,post.title(),post.slug(),post.date(),post.timeToRead(),post.tags(),id);
+        String sql = "update post set title = ?, slug = ?, date = ?, time_to_read = ?, tags = ?, version = ? " +
+                "where id = ?";
+        int update = jdbcTemplate.update(sql,post.title(), post.slug(), post.date(), post.timeToRead(),
+                post.tags(), post.version(), id);
         if(update == 1) {
             log.info("Post Updated: " + post.title());
         }

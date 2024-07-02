@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS Post;
+DROP TABLE IF EXISTS post;
 
-CREATE TABLE Post (
+CREATE TABLE post (
                       id varchar(255) NOT NULL,
                       title varchar(255) NOT NULL,
                       slug varchar(255) NOT NULL,

@@ -20,7 +20,8 @@ public class ServerApplication {
     @Bean
     CommandLineRunner commandLineRunner(@Qualifier("jdbcTemplatePostService") PostService postService) {
         return args -> {
-            postService.create(new Post("1234", "Hello World", "hello-world", LocalDate.now(), 1, "java, spring"));
+            postService.create(new Post("1234", "Hello World", "hello-world", LocalDate.now(),
+                    1, "java, spring", 1));
         };
     }
 }
